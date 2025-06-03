@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Install & Test') {
       steps {
-        sh 'docker compose -f $COMPOSE_FILE_TEST up --build --abort-on-container-exit'
+        sh 'docker compose -f $COMPOSE_FILE_TEST up --build'
       }
     }
     stage('deploy') {
