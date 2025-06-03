@@ -4,34 +4,35 @@ services:
       context: ./api
       args:
         NODE_ENV: production
-    container_name: nodejs-auth-api
+    image: auth-api:latest
+    container_name: auth-api
     ports:
-      - "3000:3000" # Map host port 3000 to container port 3000
+      - "3000:3000"
     env_file:
-      - ./api/.env # Load environment variables from the .env file
+      - ./api/.env
     command:
       ['npm','start']
     depends_on:
-      - mongodb # Ensure mongodb service starts before nodejs-app
+      - mongodb
     networks:
-      - app-network # Connect to a custom network
+      - app-network
 
   mongodb:
-    image: mongo:latest # Use the latest official MongoDB image
+    image: mongo:latest
     container_name: auth-mongodb
     ports:
-      - "27017:27017" # Expose MongoDB default port (optional, but good for local dev)
+      - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: user # For a more secure setup, use these
-      MONGO_INITDB_ROOT_PASSWORD: pass # And update your MONGO_URI accordingly
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pass
     volumes:
-      - mongo_data:/data/db # Persist MongoDB data to a named volume
+      - mongo_data:/data/db
     networks:
-      - app-network # Connect to the custom network
+      - app-network
 
 volumes:
-  mongo_data: # Define the named volume for MongoDB data persistence
+  mongo_data:
 
 networks:
-  app-network: # Define a custom network for our services to communicate
+  app-network:
     driver: bridge
