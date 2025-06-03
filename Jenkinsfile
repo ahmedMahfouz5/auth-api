@@ -1,9 +1,11 @@
+```groovy
 pipeline {
   agent any
 
   environment {
     COMPOSE_FILE_TEST = 'docker-compose.dev.yml'
     COMPOSE_FILE_PROD = 'docker-compose.prod.yml'
+    EMAIL_RECIPIENTS = 'jimap84307@jeanssi.com'
   }
 
   stages {
@@ -12,9 +14,18 @@ pipeline {
         sh 'docker compose -f $COMPOSE_FILE_TEST up --build --abort-on-container-exit'
       }
     }
-    stage('deploy') {
+
+    stage('Deploy') {
       steps {
-        sh 'docker compose -f docker-compose.prod.yml up -d --build'
+        sh 'docker compose -f $COMPOSE_FILE_PROD up -d --build'
+      }
+    }
+
+    stage('Email Notification') {
+      steps {
+        mail to: "$EMAIL_RECIPIENTS",
+             subject: "Jenkins Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             body: "The pipeline has finished. Check the build details at ${env.BUILD_URL}"
       }
     }
   }
@@ -25,7 +36,11 @@ pipeline {
     }
     failure {
       echo '❌ Tests failed.'
-      sh 'docker compose -f $COMPOSE_FILE down --volumes --remove-orphans'
+      sh 'docker compose -f $COMPOSE_FILE_TEST down --volumes --remove-orphans'
+      mail to: "$EMAIL_RECIPIENTS",
+           subject: "Jenkins Job: ${env.JOB_NAME} #${env.BUILD_NUMBER} - FAILURE",
+           body: "The pipeline failed. Check the build details at ${env.BUILD_URL}"
     }
   }
 }
+```
