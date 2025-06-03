@@ -14,13 +14,7 @@ pipeline {
     }
     stage('deploy') {
       steps {
-        sh 'docker compose -f $COMPOSE_FILE_PROD down --volumes --remove-orphans'
-      }
-    }
-
-    stage('Clean Up') {
-      steps {
-        sh 'docker compose -f $COMPOSE_FILE down --volumes --remove-orphans'
+        sh 'docker compose -d -f $COMPOSE_FILE_PROD up --build'
       }
     }
   }
@@ -31,6 +25,7 @@ pipeline {
     }
     failure {
       echo '❌ Tests failed.'
+      sh 'docker compose -f $COMPOSE_FILE down --volumes --remove-orphans'
     }
   }
 }
