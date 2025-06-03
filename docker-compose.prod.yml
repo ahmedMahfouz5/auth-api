@@ -2,20 +2,13 @@ version: '3.8' # Specify the Docker Compose file format version
 
 services:
   nodejs-app:
-  app:
     build:
       context: .
       args:
         NODE_ENV: production
-    environment:
-      NODE_ENV: production
     container_name: nodejs-auth-api
     ports:
       - "3000:3000" # Map host port 3000 to container port 3000
-    environment:
-      # Pass environment variables directly or rely on .env (see note below)
-      # MONGO_URI: mongodb://mongodb:27017/userdb
-      PORT: 3000
     env_file:
       - ./auth-api/.env # Load environment variables from the .env file
     command:
