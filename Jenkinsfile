@@ -14,7 +14,7 @@ pipeline {
     }
     stage('deploy') {
       steps {
-        sh 'docker compose -d -f $COMPOSE_FILE_PROD up --build'
+        sh 'docker compose -f docker-compose.prod.yml up -d --build'
       }
     }
   }
