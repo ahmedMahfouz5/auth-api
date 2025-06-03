@@ -10,6 +10,7 @@ pipeline {
   stages {
     stage('Install & Test') {
       steps {
+        echo '============================= start test ============================='
         sh 'docker compose -f $COMPOSE_FILE_TEST up --build --abort-on-container-exit'
       }
         post {
@@ -28,12 +29,14 @@ pipeline {
 
     stage('Deploy') {
       steps {
+        echo '============================= start deploy ============================='
         sh 'docker compose -f $COMPOSE_FILE_PROD up -d --build'
       }
     }
 
     stage('Email Notification') {
       steps {
+        echo '============================= start Email Notification ============================='
         mail to: "$EMAIL_RECIPIENTS",
              subject: "Jenkins Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
              body: "The pipeline has finished. Check the build details at ${env.BUILD_URL}"
