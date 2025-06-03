@@ -1,7 +1,7 @@
 services:
   nodejs-app:
     build:
-      context: .
+      context: ./api
       args:
         NODE_ENV: production
     container_name: nodejs-auth-api
