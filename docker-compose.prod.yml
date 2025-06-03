@@ -1,0 +1,38 @@
+version: '3.8' # Specify the Docker Compose file format version
+
+services:
+  nodejs-app:
+    build: ./api # Build the image using the Dockerfile in the current directory
+    container_name: nodejs-auth-api
+    ports:
+      - "3000:3000" # Map host port 3000 to container port 3000
+    environment:
+      # Pass environment variables directly or rely on .env (see note below)
+      # MONGO_URI: mongodb://mongodb:27017/userdb
+      PORT: 3000
+    env_file:
+      - ./auth-api/.env # Load environment variables from the .env file
+    depends_on:
+      - mongodb # Ensure mongodb service starts before nodejs-app
+    networks:
+      - app-network # Connect to a custom network
+
+  mongodb:
+    image: mongo:latest # Use the latest official MongoDB image
+    container_name: auth-mongodb
+    ports:
+      - "27017:27017" # Expose MongoDB default port (optional, but good for local dev)
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user # For a more secure setup, use these
+      MONGO_INITDB_ROOT_PASSWORD: pass # And update your MONGO_URI accordingly
+    volumes:
+      - mongo_data:/data/db # Persist MongoDB data to a named volume
+    networks:
+      - app-network # Connect to the custom network
+
+volumes:
+  mongo_data: # Define the named volume for MongoDB data persistence
+
+networks:
+  app-network: # Define a custom network for our services to communicate
+    driver: bridge
