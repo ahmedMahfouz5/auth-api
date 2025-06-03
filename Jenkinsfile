@@ -12,6 +12,18 @@ pipeline {
       steps {
         sh 'docker compose -f $COMPOSE_FILE_TEST up --build --abort-on-container-exit'
       }
+        post {
+    success {
+      echo 'All tests passed!'
+    }
+    failure {
+      echo 'Tests failed.'
+      sh 'docker compose -f $COMPOSE_FILE_TEST down --volumes --remove-orphans'
+      mail to: "$EMAIL_RECIPIENTS",
+           subject: "Jenkins Job: ${env.JOB_NAME} #${env.BUILD_NUMBER} - FAILURE",
+           body: "The pipeline failed. Check the build details at ${env.BUILD_URL}"
+    }
+  }
     }
 
     stage('Deploy') {
@@ -29,16 +41,5 @@ pipeline {
     }
   }
 
-  post {
-    success {
-      echo '✅ All tests passed!'
-    }
-    failure {
-      echo '❌ Tests failed.'
-      sh 'docker compose -f $COMPOSE_FILE_TEST down --volumes --remove-orphans'
-      mail to: "$EMAIL_RECIPIENTS",
-           subject: "Jenkins Job: ${env.JOB_NAME} #${env.BUILD_NUMBER} - FAILURE",
-           body: "The pipeline failed. Check the build details at ${env.BUILD_URL}"
-    }
-  }
+
 }
