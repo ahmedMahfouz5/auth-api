@@ -1,21 +1,27 @@
-# Use an official Node.js runtime as the base image
+# Base image
 FROM node:20-alpine
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json (if any) to the working directory
-# This allows caching of dependencies
-COPY package*.json .
+# Copy only package files to leverage Docker cache
+COPY package*.json ./
 
-# Install project dependencies
-RUN npm install
+# Set default environment (can be overridden in docker-compose)
+ARG NODE_ENV=production
+ENV NODE_ENV=$NODE_ENV
 
-# Copy the rest of the application code to the working directory
+# Install dependencies (omit devDependencies if NODE_ENV=production)
+RUN if [ "$NODE_ENV" = "production" ]; \
+    then npm install --omit=dev; \
+    else npm install; \
+    fi
+
+# Copy the full application
 COPY . .
 
-# Expose the port that the application will listen on
+# Expose app port
 EXPOSE 3000
 
-# Define the command to run the application
-CMD [ "npm", "test" ]
+# Conditional startup command
+CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"test\" ]; then npm test; else npm start; fi"]
