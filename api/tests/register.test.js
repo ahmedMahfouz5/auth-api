@@ -26,7 +26,7 @@ describe('POST /api/register', () => {
 
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty('message', 'User registered successfully!');
-        expect(res.body.user).toHaveProperty('email', 'testtttttt@example.com'); // it should be test
+        expect(res.body.user).toHaveProperty('email', 'test@example.com'); // it should be test
     });
 
     it('should not register with missing email or password', async () => {
