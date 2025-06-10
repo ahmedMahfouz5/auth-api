@@ -16,6 +16,7 @@ pipeline {
         post {
     success {
       echo 'All tests passed!'
+      sh 'docker compose -f $COMPOSE_FILE_TEST down --volumes --remove-orphans'
     }
     failure {
       echo 'Tests failed.'
@@ -36,7 +37,7 @@ pipeline {
 
     stage('Email Notification') {
       steps {
-        echo '============================= start Email Notification ============================='
+        echo '============================= start email notification ============================='
         mail to: "$EMAIL_RECIPIENTS",
              subject: "Jenkins Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
              body: "The pipeline has finished. Check the build details at ${env.BUILD_URL}"
