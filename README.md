@@ -50,7 +50,7 @@ POST /api/register
 Content-Type: application/json
 
 {
-  "username": "testuser",
+  "email": "testuser@gmail.com",
   "password": "password123"
 }
 ```
@@ -62,7 +62,7 @@ POST /api/login
 Content-Type: application/json
 
 {
-  "username": "testuser",
+  "email": "testuser@gmail.com",
   "password": "password123"
 }
 ```
@@ -73,6 +73,13 @@ Content-Type: application/json
 - Express.js
 - MongoDB (Mongoose)
 - bcryptjs
+
+## containarization 
+- Docker
+- Docker compose
+
+## CI/CD 
+- Jenkins
 
 ## Contributing
 
