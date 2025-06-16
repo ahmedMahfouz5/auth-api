@@ -13,7 +13,7 @@ jobs:
           echo "::endgroup::"
       - name: env variable
         run: |
-          echo "my-name=ahmed" >> $GITHUB_ENV
+          echo "myname=ahmed" >> $GITHUB_ENV
       - name: print the variable
         run: |
-          echo $my-name
+          echo $myname
