@@ -7,6 +7,6 @@ jobs:
     steps:
       - name: print env
         run: |
-          echo "my env is ${myaction}"
+          echo "my env is $myaction"
         env:
-          myaction: ${{$github.action}}
+          myaction: ${{ $github.action }}
