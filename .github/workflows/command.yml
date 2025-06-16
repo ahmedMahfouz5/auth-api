@@ -16,4 +16,4 @@ jobs:
           echo "my-name=ahmed" >> $GITHUB_ENV
       - name: print the variable
         run: |
-          echo "$my-name"
+          echo $my-name
