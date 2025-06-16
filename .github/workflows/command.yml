@@ -1,0 +1,17 @@
+name: command Workflow
+on: ['push']
+
+run on: ubuntu-latest
+jobs:
+  steps:
+    name: depuge group
+    run: |
+      echo "::group:: my group msg "
+      echo "my msg 1"
+      echo "my msg 2"
+    name: env variable
+    run: |
+      echo "my-name=ahmed" >> $GITHUB_ENV
+    name: print the variable
+    run: |
+      echo "$my-name"
